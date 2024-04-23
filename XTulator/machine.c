@@ -265,6 +265,7 @@ int machine_init(MACHINE_t* machine, char* id) {
 			int ret;
 			ret = utility_loadFile(temp, machine_mem[num][i].size, machine_mem[num][i].filename);
 			if ((machine_mem[num][i].required == MACHINE_ROM_REQUIRED) && ret) {
+                free(temp);
 				debug_log(DEBUG_ERROR, "[MACHINE] Could not open file, or size is less than expected: %s\r\n", machine_mem[num][i].filename);
 				return -1;
 			}

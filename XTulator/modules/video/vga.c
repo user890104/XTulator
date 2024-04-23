@@ -120,6 +120,7 @@ int vga_init() {
 	memory_mapCallbackRegister(0xA0000, 0x20000, (void*)vga_readmemory, (void*)vga_writememory, NULL);
 
 	if (utility_loadFile(VBIOS, 32768, "roms/video/et4000.bin")) {
+        debug_log(DEBUG_ERROR, "[VGA] Failed to load ET4000 ROM\r\n");
 		return -1;
 	}
 	memory_mapRegister(0xC0000, 32768, VBIOS, NULL);

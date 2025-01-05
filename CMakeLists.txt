@@ -13,4 +13,4 @@ file(GLOB io XTulator/modules/io/*.c)
 file(GLOB video XTulator/modules/video/*.c)
 add_executable(xtulator ${XT} ${chipset} ${cpu} ${audio} ${disk} ${input} ${io} ${video})
 
-target_link_libraries(xtulator m pthread SDL2 pcap)
+target_link_libraries(xtulator m pthread SDL2)

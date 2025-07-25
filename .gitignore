@@ -21,3 +21,5 @@ obj/
 _ReSharper*/
 .vs/
 /cmake-build-debug/
+/roms/machine/generic_xt/pcxtbios.bin
+/roms/video/et4000.bin

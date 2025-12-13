@@ -21,6 +21,7 @@
 #define _CPU_H_
 
 #include <stdint.h>
+#include "../config.h"
 #include "cpuconf.h"
 #include "../chipset/i8259.h"
 
@@ -155,10 +156,10 @@ typedef struct CPU_t CPU_t;
 
 
 uint8_t cpu_read(CPU_t* cpu, uint32_t addr);
-uint16_t cpu_readw(CPU_t* cpu, uint32_t addr);
+FUNC_INLINE uint16_t cpu_readw(CPU_t* cpu, uint32_t addr);
 void cpu_write(CPU_t* cpu, uint32_t addr32, uint8_t value);
-void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value);
-void cpu_intcall(CPU_t* cpu, uint8_t intnum);
+FUNC_INLINE void cpu_writew(CPU_t* cpu, uint32_t addr32, uint16_t value);
+FUNC_INLINE void cpu_intcall(CPU_t* cpu, uint8_t intnum);
 void cpu_reset(CPU_t* cpu);
 void cpu_interruptCheck(CPU_t* cpu, I8259_t* i8259);
 void cpu_exec(CPU_t* cpu, uint32_t execloops);

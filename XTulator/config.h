@@ -43,7 +43,7 @@
 #ifdef _WIN32
 #define FUNC_INLINE __forceinline
 #else
-#define FUNC_INLINE __attribute__((always_inline))
+#define FUNC_INLINE static inline __attribute__((always_inline))
 #endif
 
 #ifndef _WIN32

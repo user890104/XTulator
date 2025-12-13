@@ -29,7 +29,7 @@ union _bytewordregs_ {
 	uint8_t byteregs[8];
 };
 
-typedef struct {
+struct CPU_t {
 	union _bytewordregs_ regs;
 	uint8_t	opcode, segoverride, reptype, hltstate;
 	uint16_t segregs[4], savecs, saveip, ip, useseg, oldsp;
@@ -40,8 +40,10 @@ typedef struct {
 	int32_t	result;
 	uint16_t trap_toggle;
 	uint64_t totalexec;
-	void (*int_callback[256])(void*, uint8_t); //Want to pass a CPU object in first param, but it's not defined at this point so use a void*
-} CPU_t;
+	void (*int_callback[256])(struct CPU_t*, uint8_t);
+};
+
+typedef struct CPU_t CPU_t;
 
 #define regax 0
 #define regcx 1

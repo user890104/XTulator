@@ -76,6 +76,17 @@ volatile double vga_targetFPS = 60, vga_lockFPS = 0;
 volatile uint32_t vga_hblankTimer, vga_hblankEndTimer, vga_drawTimer;
 volatile uint16_t vga_curScanline = 0;
 
+#ifdef _WIN32
+static void __cdecl vga_renderThread_win(void *dummy) {
+	vga_renderThread_impl(dummy);
+}
+#else
+static void *vga_renderThread_posix(void *dummy) {
+	vga_renderThread_impl(dummy);
+	return NULL;
+}
+#endif
+
 int vga_init() {
 	int x, y, i;
 
@@ -111,9 +122,9 @@ int vga_init() {
 
 	//TODO: error checking below
 #ifdef _WIN32
-	_beginthread(vga_renderThread, 0, NULL);
+	_beginthread(vga_renderThread_win, 0, NULL);
 #else
-	pthread_create(&vga_renderThreadID, NULL, vga_renderThread, NULL);
+	pthread_create(&vga_renderThreadID, NULL, vga_renderThread_posix, NULL);
 #endif
 
 	ports_cbRegister(0x3B4, 39, (void*)vga_readport, NULL, (void*)vga_writeport, NULL, NULL);
@@ -388,7 +399,7 @@ void vga_update(uint32_t start_x, uint32_t start_y, uint32_t end_x, uint32_t end
 	}
 }
 
-void vga_renderThread(void* dummy) {
+static void vga_renderThread_impl(void* dummy) {
 	while (running) {
 		if (vga_doRender == 1) {
 			vga_update(0, 0, vga_w - 1, vga_h - 1);

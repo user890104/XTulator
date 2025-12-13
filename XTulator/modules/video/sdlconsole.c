@@ -262,10 +262,10 @@ uint8_t sdlconsole_getScancode() {
 	return sdlconsole_curkey;
 }
 
-uint8_t sdlconsole_translateScancode(SDL_Keycode keyval) {
+uint8_t sdlconsole_translateScancode(SDLKey keyval) {
 	uint8_t i;
 	for (i = 0; i < 95; i++) {
-		if (keyval == (SDL_Keycode)sdlconsole_translateMatrix[i][0]) {
+		if (keyval == (SDLKey)sdlconsole_translateMatrix[i][0]) {
 			return (uint8_t)sdlconsole_translateMatrix[i][1];
 		}
 	}

@@ -33,6 +33,9 @@
 #include "../input/mouse.h"
 #include "../../timing.h"
 #include "../../menus.h"
+#ifdef __APPLE__
+#include <dispatch/dispatch.h>
+#endif
 
 SDL_Window *sdlconsole_window = NULL;
 SDL_Renderer *sdlconsole_renderer = NULL;
@@ -88,7 +91,13 @@ int sdlconsole_setWindow(int w, int h) {
 	sdlconsole_renderer = NULL;
 	sdlconsole_texture = NULL;
 
+#ifdef __APPLE__
+	dispatch_async(dispatch_get_main_queue(), ^{
+		SDL_SetWindowSize(sdlconsole_window, w, h);
+	});
+#else
 	SDL_SetWindowSize(sdlconsole_window, w, h);
+#endif
 
 	sdlconsole_renderer = SDL_CreateRenderer(sdlconsole_window, -1, 0);
 	if (sdlconsole_renderer == NULL) return -1;
@@ -107,7 +116,16 @@ int sdlconsole_setWindow(int w, int h) {
 void sdlconsole_setTitle(char* title) { //appends something to the main title, doesn't replace it all
 	char tmp[1024];
 	sprintf(tmp, "%s - %s", sdlconsole_title, title);
+
+#ifdef __APPLE__
+	char *tmp_copy = strdup(tmp);
+	dispatch_async(dispatch_get_main_queue(), ^{
+		SDL_SetWindowTitle(sdlconsole_window, tmp_copy);
+		free(tmp_copy);
+	});
+#else
 	SDL_SetWindowTitle(sdlconsole_window, tmp);
+#endif
 }
 
 void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {

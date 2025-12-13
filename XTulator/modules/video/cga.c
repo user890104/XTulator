@@ -74,6 +74,17 @@ uint8_t *cga_RAM = NULL;
 
 volatile uint8_t cga_doDraw = 1;
 
+#ifdef _WIN32
+static void __cdecl cga_renderThread_win(void *dummy) {
+	cga_renderThread_impl(dummy);
+}
+#else
+static void *cga_renderThread_posix(void *dummy) {
+	cga_renderThread_impl(dummy);
+	return NULL;
+}
+#endif
+
 int cga_init() {
 	int x, y;
 
@@ -111,9 +122,9 @@ int cga_init() {
 
 	//TODO: error checking below
 #ifdef _WIN32
-	_beginthread(cga_renderThread, 0, NULL);
+	_beginthread(cga_renderThread_win, 0, NULL);
 #else
-	pthread_create(&cga_renderThreadID, NULL, cga_renderThread, NULL);
+	pthread_create(&cga_renderThreadID, NULL, cga_renderThread_posix, NULL);
 #endif
 
 	ports_cbRegister(0x3D0, 16, (void*)cga_readport, NULL, (void*)cga_writeport, NULL, NULL);
@@ -237,7 +248,7 @@ void cga_update(uint32_t start_x, uint32_t start_y, uint32_t end_x, uint32_t end
 	sdlconsole_blit((uint32_t *)cga_framebuffer, 640, 400, 640 * sizeof(uint32_t));
 }
 
-void cga_renderThread(void* dummy) {
+static void cga_renderThread_impl(void* dummy) {
 	while (running) {
 		if (cga_doDraw == 1) {
 			cga_update(0, 0, 639, 399);

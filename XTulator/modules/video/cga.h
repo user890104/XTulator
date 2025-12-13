@@ -2,7 +2,6 @@
 #define _CGA_H_
 
 #include <stdint.h>
-#include "../../cpu/cpu.h"
 
 extern const uint8_t cga_palette[16][3];
 
@@ -12,7 +11,7 @@ void cga_writeport(void* dummy, uint16_t port, uint8_t value);
 uint8_t cga_readport(void* dummy, uint16_t port);
 void cga_blinkCallback(void* dummy);
 void cga_scanlineCallback(void* dummy);
-void cga_renderThread(void* cpu);
+static void cga_renderThread_impl(void* dummy);
 void cga_writememory(void* dummy, uint32_t addr, uint8_t value);
 uint8_t cga_readmemory(void* dummy, uint32_t addr);
 void cga_drawCallback(void* dummy);

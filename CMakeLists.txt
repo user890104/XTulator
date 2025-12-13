@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-project(xtulator)
+project(xtulator C)
 
-set(CMAKE_C_FLAGS "-O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+
+find_package(SDL2 REQUIRED)
 
 file(GLOB XT XTulator/*.c)
 file(GLOB chipset XTulator/chipset/*.c)
@@ -11,6 +13,8 @@ file(GLOB disk XTulator/modules/disk/*.c)
 file(GLOB input XTulator/modules/input/*.c)
 file(GLOB io XTulator/modules/io/*.c)
 file(GLOB video XTulator/modules/video/*.c)
+
 add_executable(xtulator ${XT} ${chipset} ${cpu} ${audio} ${disk} ${input} ${io} ${video})
 
-target_link_libraries(xtulator m pthread SDL2)
+target_include_directories(xtulator PRIVATE ${SDL2_INCLUDE_DIRS})
+target_link_libraries(xtulator PRIVATE ${SDL2_LIBRARIES} m pthread)

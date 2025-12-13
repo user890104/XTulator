@@ -162,7 +162,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 		machine->mixOPL = 1;
 	}
 	if ((machine->hwflags & MACHINE_HW_RTC) && !(machine->hwflags & MACHINE_HW_SKIP_RTC)) {
-		rtc_init(&machine->CPU);
+		rtc_init();
 	}
 
 	if ((machine->hwflags & MACHINE_HW_UART0_NONE) && !(machine->hwflags & MACHINE_HW_SKIP_UART0)) {

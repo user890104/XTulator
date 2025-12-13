@@ -1,11 +1,7 @@
 #ifndef _SDLAUDIO_H_
 #define _SDLAUDIO_H_
 
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
+#include <SDL.h>
 #include "../../machine.h"
 
 #define SDLAUDIO_TIMING_FAST		1

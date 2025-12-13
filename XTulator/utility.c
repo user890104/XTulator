@@ -20,11 +20,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <SDL.h>
 #ifdef _WIN32
-#include <SDL/SDL.h>
 #include <Windows.h>
-#else
-#include <SDL2/SDL.h>
 #endif
 #include "config.h"
 #include "memory.h"

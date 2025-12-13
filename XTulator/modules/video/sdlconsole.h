@@ -1,11 +1,7 @@
 #ifndef _SDLCONSOLE_H_
 #define _SDLCONSOLE_H_
 
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
+#include <SDL.h>
 
 #define SDLCONSOLE_EVENT_NONE		0
 #define SDLCONSOLE_EVENT_KEY		1

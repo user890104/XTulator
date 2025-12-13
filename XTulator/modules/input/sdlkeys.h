@@ -2,11 +2,7 @@
 #define _SDLKEYS_H_
 
 #include <stdint.h>
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
+#include <SDL.h>
 
 const uint32_t sdlconsole_translateMatrix[95][2] = {
 	{ SDLK_ESCAPE, 0x01 },

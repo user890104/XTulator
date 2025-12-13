@@ -28,11 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL_thread.h>
-#endif
+#include <SDL.h>
 #include <pcap.h>
 #include "../../debuglog.h"
 #include "../../utility.h"

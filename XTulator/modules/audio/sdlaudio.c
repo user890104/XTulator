@@ -33,12 +33,10 @@
 #include "../../timing.h"
 #include "../../utility.h"
 #include "../../debuglog.h"
+#include <SDL.h>
 #ifdef _WIN32
 #include <Windows.h>
-#include <SDL/SDL.h>
 #include <process.h>
-#else
-#include <SDL2/SDL.h>
 #endif
 
 SDL_mutex* sdlaudio_mutex = NULL;

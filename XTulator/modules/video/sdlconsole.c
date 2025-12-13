@@ -19,12 +19,10 @@
 
 #include "../../config.h"
 
+#include <SDL.h>
 #ifdef _WIN32
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL_syswm.h>
 #include <Windows.h>
-#else
-#include <SDL2/SDL.h>
 #endif
 #include <stdio.h>
 #include <stdint.h>

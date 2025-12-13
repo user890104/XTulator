@@ -17,11 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL2/SDL.h>
-#endif
+#include <SDL.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>

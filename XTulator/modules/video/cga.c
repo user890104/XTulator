@@ -20,11 +20,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL_thread.h>
-#endif
+#include <SDL.h>
 #include "cga.h"
 #include "../../config.h"
 #include "../../timing.h"

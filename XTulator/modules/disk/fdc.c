@@ -345,7 +345,28 @@ void fdc_transfersector(FDC_t* fdc) {
 			lba = (fdc->position[drv].track * tracksize * 2) + (fdc->position[drv].head * tracksize) + ((fdc->position[drv].sect - 1) * 512);
 			//printf("LBA = %lu\r\n", lba);
 			fseek(fdc->disk[drv].dfile, SEEK_SET, lba);
-			fread(fdc->sectbuf, 1, 512, fdc->disk[drv].dfile);
+			memset(fdc->sectbuf, 0, sizeof(fdc->sectbuf));
+			size_t nread = fread(fdc->sectbuf, 1, sizeof(fdc->sectbuf), fdc->disk[drv].dfile);
+			
+			if (nread == sizeof(fdc->sectbuf)) {
+				fdc->st[0] = FDC_ST0_INT_NORMAL | drv;
+				fdc->st[1] = 0x00;
+				fdc->st[2] = 0x00;
+			}
+			else {
+				if (feof(fdc->disk[drv].dfile)) {
+					/* Sector beyond EOF / missing sector */
+					fdc->st[0] = FDC_ST0_INT_ABNORMAL | drv;
+					fdc->st[1] = FDC_ST1_NDAT | FDC_ST1_DE; /* No Data + Data Error */
+					fdc->st[2] = FDC_ST2_NDAM; /* Missing address mark */
+				} else if (ferror(fdc->disk[drv].dfile)) {
+					/* Bad sector / CRC error */
+					fdc->st[0] = FDC_ST0_INT_ABNORMAL | drv;
+					fdc->st[1] = FDC_ST1_DE; /* Data Error */
+					fdc->st[2] = FDC_ST2_CRCE; /* Data error in data field */
+				}
+			}
+
 			fdc->position[drv].transferring = 1;
 			fdc->sectpos = 0;
 			fdc_fifoclear(fdc);

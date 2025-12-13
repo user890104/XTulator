@@ -82,34 +82,36 @@ uint8_t rtc_read(void* dummy, uint16_t addr) {
 
 uint8_t rtc_read(void* dummy, uint16_t addr) {
 	uint8_t ret = 0xFF;
+	time_t now;
 	struct tm tdata;
 
-	time(&tdata);
+	time(&now);
+	tdata = *localtime(&now);
 
 	addr &= 0x1F;
 	switch (addr) {
 	case 1:
 		ret = 0;
 		break;
-	case 2:
+	case 2: // seconds
 		ret = (uint8_t)tdata.tm_sec;
 		break;
-	case 3:
+	case 3: // minutes
 		ret = (uint8_t)tdata.tm_min;
 		break;
-	case 4:
+	case 4: // hours
 		ret = (uint8_t)tdata.tm_hour;
 		break;
-	case 5:
-		ret = (uint8_t)tdata.tm_wday;
+	case 5: // weekday (Sunday=1, Saturday=7)
+		ret = (uint8_t)(tdata.tm_wday + 1);
 		break;
-	case 6:
+	case 6: // day of month
 		ret = (uint8_t)tdata.tm_mday;
 		break;
-	case 7:
-		ret = (uint8_t)tdata.tm_mon;
+	case 7: // month (1–12)
+		ret = (uint8_t)(tdata.tm_mon + 1);
 		break;
-	case 9:
+	case 9: // year (last two digits)
 		ret = (uint8_t)tdata.tm_year % 100;
 		break;
 	}

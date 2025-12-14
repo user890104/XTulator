@@ -102,6 +102,17 @@ int main(int argc, char *argv[]) {
 	menus_setMachine(&machine);
 #endif
 
+#ifdef ROCKBOX
+	argc = 9;
+	char *new_argv[] = { "/xtulator",
+		"-fd0", XTULATOR_DIR "images/fd0.img",
+		"-fd1", XTULATOR_DIR "images/fd1.img",
+		"-hd0", XTULATOR_DIR "images/hd0.img",
+		"-hd1", XTULATOR_DIR "images/hd1.img",
+		NULL };
+	argv = new_argv;
+#endif
+
 	machine.pcap_if = -1;
 	if (args_parse(&machine, argc, argv)) {
 		return -1;

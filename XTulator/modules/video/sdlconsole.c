@@ -33,6 +33,7 @@
 #include "../input/mouse.h"
 #include "../../timing.h"
 #include "../../menus.h"
+#include "../../debuglog.h"
 #ifdef __APPLE__
 #include <dispatch/dispatch.h>
 #endif
@@ -134,7 +135,9 @@ void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
 	curtime = timing_getCur();
 
 	if ((w != sdlconsole_curw) || (h != sdlconsole_curh)) {
-		sdlconsole_setWindow(w, h);
+		if (sdlconsole_setWindow(w, h)) {
+			debug_log(DEBUG_ERROR, "failed setWindow %ux%u\r\n", w, h);
+		}
 	}
 	SDL_UpdateTexture(sdlconsole_texture, NULL, pixels, stride);
 	SDL_RenderClear(sdlconsole_renderer);

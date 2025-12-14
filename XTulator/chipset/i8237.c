@@ -24,7 +24,7 @@
 #include "../config.h"
 #include <stdint.h>
 #include <stdio.h>
-#include <memory.h>
+#include <string.h>
 #include "i8237.h"
 #include "../cpu/cpu.h"
 #include "../ports.h"

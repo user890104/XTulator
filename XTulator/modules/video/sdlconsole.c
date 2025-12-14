@@ -34,11 +34,10 @@
 #include "../../debuglog.h"
 #ifdef __APPLE__
 #include <dispatch/dispatch.h>
+#include <pthread.h>
 #endif
 
-SDL_Window *sdlconsole_window = NULL;
-SDL_Renderer *sdlconsole_renderer = NULL;
-SDL_Texture *sdlconsole_texture = NULL;
+SDL_Surface *sdlconsole_screen = NULL;
 
 uint64_t sdlconsole_frameTime[30];
 uint32_t sdlconsole_keyTimer;
@@ -61,16 +60,13 @@ int sdlconsole_init(char *title) {
 	if (SDL_Init(SDL_INIT_VIDEO)) return -1;
 
 	sdlconsole_title = title;
+	sdlconsole_curw = 640;
+	sdlconsole_curh = 400;
 
-	sdlconsole_window = SDL_CreateWindow(sdlconsole_title,
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		640, 400,
-		SDL_WINDOW_OPENGL);
-	if (sdlconsole_window == NULL) return -1;
+	sdlconsole_screen = SDL_SetVideoMode(sdlconsole_curw, sdlconsole_curh, 32, SDL_SWSURFACE);
+	if (!sdlconsole_screen) return -1;
 
-	if (sdlconsole_setWindow(640, 400)) {
-		return -1;
-	}
+	SDL_WM_SetCaption(sdlconsole_title, NULL);
 
 	sdlconsole_keyTimer = timing_addTimer(sdlconsole_keyRepeat, NULL, 2, TIMING_DISABLED);
 
@@ -85,26 +81,25 @@ int sdlconsole_init(char *title) {
 }
 
 int sdlconsole_setWindow(int w, int h) {
-	if (sdlconsole_renderer != NULL) SDL_DestroyRenderer(sdlconsole_renderer);
-	if (sdlconsole_texture != NULL) SDL_DestroyTexture(sdlconsole_texture);
-	sdlconsole_renderer = NULL;
-	sdlconsole_texture = NULL;
+	if (sdlconsole_screen) SDL_FreeSurface(sdlconsole_screen);
+	sdlconsole_screen = NULL;
 
 #ifdef __APPLE__
-	dispatch_async(dispatch_get_main_queue(), ^{
-		SDL_SetWindowSize(sdlconsole_window, w, h);
-	});
+	if (pthread_main_np()) {
+		sdlconsole_screen = SDL_SetVideoMode(w, h, 32, SDL_SWSURFACE);
+	}
+	else {
+		__block SDL_Surface *result = NULL;
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			result = SDL_SetVideoMode(w, h, 32, SDL_SWSURFACE);
+		});
+		sdlconsole_screen = result;
+	}
 #else
-	SDL_SetWindowSize(sdlconsole_window, w, h);
+	sdlconsole_screen = SDL_SetVideoMode(w, h, 32, SDL_SWSURFACE);
 #endif
 
-	sdlconsole_renderer = SDL_CreateRenderer(sdlconsole_window, -1, 0);
-	if (sdlconsole_renderer == NULL) return -1;
-
-	sdlconsole_texture = SDL_CreateTexture(sdlconsole_renderer,
-		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
-		w, h);
-	if (sdlconsole_texture == NULL) return -1;
+	if (!sdlconsole_screen) return -1;
 
 	sdlconsole_curw = w;
 	sdlconsole_curh = h;
@@ -137,10 +132,24 @@ void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
 			debug_log(DEBUG_ERROR, "failed setWindow %ux%u\r\n", w, h);
 		}
 	}
-	SDL_UpdateTexture(sdlconsole_texture, NULL, pixels, stride);
-	SDL_RenderClear(sdlconsole_renderer);
-	SDL_RenderCopy(sdlconsole_renderer, sdlconsole_texture, NULL, NULL);
-	SDL_RenderPresent(sdlconsole_renderer);
+
+	if (SDL_MUSTLOCK(sdlconsole_screen)) SDL_LockSurface(sdlconsole_screen);
+
+	uint8_t *dst = (uint8_t *)sdlconsole_screen->pixels;
+	uint8_t *src = (uint8_t *)pixels;
+
+	if (sdlconsole_screen->pitch == stride) {
+		memcpy(dst, src, sdlconsole_screen->pitch * sdlconsole_screen->h);
+	}
+	else {
+		for (int y = 0; y < sdlconsole_screen->h; y++) {
+			memcpy(dst + sdlconsole_screen->pitch * y, src + stride * y, sdlconsole_screen->pitch);
+		}
+	}
+
+	if (SDL_MUSTLOCK(sdlconsole_screen)) SDL_UnlockSurface(sdlconsole_screen);
+
+	SDL_Flip(sdlconsole_screen);
 
 	if (lasttime != 0) {
 		int i, avgcount;

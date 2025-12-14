@@ -90,7 +90,7 @@ int cga_init() {
 
 	debug_log(DEBUG_INFO, "[CGA] Initializing CGA video device\r\n");
 
-	if (utility_loadFile(cga_font, 4096, "roms/video/cgachar.bin")) {
+	if (utility_loadFile(cga_font, 4096, XTULATOR_DIR "roms/video/cgachar.bin")) {
 		debug_log(DEBUG_ERROR, "[CGA] Failed to load character generator ROM\r\n");
 		return -1;
 	}

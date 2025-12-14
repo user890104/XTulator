@@ -6,6 +6,8 @@
 #define STR_TITLE "XTulator"
 #define STR_VERSION "0.24.5.24"
 
+#define XTULATOR_DIR ""
+
 //#define DEBUG_DMA
 //#define DEBUG_VGA
 //#define DEBUG_CGA

@@ -22,6 +22,9 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include "debuglog.h"
+#ifdef ROCKBOX
+#include <SDL.h>
+#endif
 
 uint8_t debug_level = DEBUG_INFO;
 

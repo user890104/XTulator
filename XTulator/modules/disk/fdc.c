@@ -25,6 +25,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#ifdef ROCKBOX
+#include "fcntl.h"
+#endif
 #include "../../config.h"
 #include "../../debuglog.h"
 #include "../../cpu/cpu.h"

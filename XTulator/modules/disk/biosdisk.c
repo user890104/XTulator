@@ -28,6 +28,9 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#ifdef ROCKBOX
+#include "fcntl.h"
+#endif
 #include "biosdisk.h"
 #include "../../cpu/cpu.h"
 #include "../../debuglog.h"

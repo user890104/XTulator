@@ -20,7 +20,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#ifdef ROCKBOX
+#include <SDL.h>
+#else
 #include <math.h>
+#endif
 #include "../../config.h"
 #include "../../debuglog.h"
 #include "../../ports.h"

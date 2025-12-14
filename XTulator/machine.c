@@ -52,6 +52,9 @@
 #include "utility.h"
 #include "timing.h"
 #include "machine.h"
+#ifdef ROCKBOX
+#include <SDL.h>
+#endif
 
 /*
 	ID string, full description, init function, default video, speed in MHz (-1 = unlimited), default hardware flags

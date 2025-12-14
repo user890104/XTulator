@@ -30,6 +30,9 @@
 #include "../ports.h"
 #include "../timing.h"
 #include "../debuglog.h"
+#ifdef ROCKBOX
+#include <SDL.h>
+#endif
 
 void i8237_reset(I8237_t* i8237) {
 	memset(i8237, 0, sizeof(I8237_t));

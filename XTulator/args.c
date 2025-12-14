@@ -44,6 +44,9 @@
 #include "modules/video/cga.h"
 #include "modules/video/vga.h"
 #include "debuglog.h"
+#ifdef ROCKBOX
+#include <SDL.h>
+#endif
 
 double speedarg = 0;
 

@@ -195,7 +195,6 @@ int sdlconsole_loop() {
 				vga_dumpregs();
 			}
 #endif
-			if (event.key.repeat) return SDLCONSOLE_EVENT_NONE;
 			switch (event.key.keysym.sym) {
 			case SDLK_F11:
 				return SDLCONSOLE_EVENT_DEBUG_1;
@@ -218,7 +217,6 @@ int sdlconsole_loop() {
 				}
 			}
 		case SDL_KEYUP:
-			if (event.key.repeat) return SDLCONSOLE_EVENT_NONE;
 			if (event.key.keysym.sym == SDLK_LCTRL) sdlconsole_ctrl = 0;
 			if (event.key.keysym.sym == SDLK_LALT) sdlconsole_alt = 0;
 			sdlconsole_curkey = sdlconsole_translateScancode(event.key.keysym.sym) | 0x80;

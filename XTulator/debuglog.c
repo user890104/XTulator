@@ -35,7 +35,11 @@ void debug_log(uint8_t level, char* format, ...) {
 		va_end(argptr);
 		return;
 	}
+#ifdef ROCKBOX
+	vprintf(format, argptr);
+#else
 	vfprintf(stderr, format, argptr);
+#endif
 	fflush(stderr);
 	va_end(argptr);
 }

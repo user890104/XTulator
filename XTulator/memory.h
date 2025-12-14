@@ -8,6 +8,6 @@
 
 void memory_mapRegister(uint32_t start, uint32_t len, uint8_t* readb, uint8_t* writeb);
 void memory_mapCallbackRegister(uint32_t start, uint32_t count, uint8_t(*readb)(void*, uint32_t), void (*writeb)(void*, uint32_t, uint8_t), void* udata);
-int memory_init();
+int xtulator_memory_init();
 
 #endif

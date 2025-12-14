@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 
 	ports_init();
 	timing_init();
-	memory_init();
+	xtulator_memory_init();
 #ifdef _WIN32
 	menus_setMachine(&machine);
 #endif

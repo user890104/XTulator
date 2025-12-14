@@ -81,7 +81,7 @@ void memory_mapCallbackRegister(uint32_t start, uint32_t count, uint8_t(*readb)(
 	}
 }
 
-int memory_init() {
+int xtulator_memory_init() {
 	uint32_t i;
 
 	for (i = 0; i < MEMORY_RANGE; i++) {

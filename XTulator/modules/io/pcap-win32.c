@@ -110,7 +110,7 @@ int pcap_init(NE2000_t* ne2000, int dev) {
 
 	pcap_ne2000 = ne2000;
 	
-	pcap_dispatchThreadID = SDL_CreateThread(pcap_dispatchThread, "xtulator-pcap-win32", NULL);
+	pcap_dispatchThreadID = SDL_CreateThread(pcap_dispatchThread, NULL);
 	
 	if (pcap_dispatchThreadID == NULL) {
 		debug_log(DEBUG_ERROR, "[PCAP-WIN32] Failed to create thread");

@@ -106,7 +106,7 @@ int vga_init() {
 		return -1;
 	}
 
-	vga_renderThreadID = SDL_CreateThread(vga_renderThread, "xtulator-vga", NULL);
+	vga_renderThreadID = SDL_CreateThread(vga_renderThread, NULL);
 	
 	if (vga_renderThreadID == NULL) {
 		debug_log(DEBUG_ERROR, "[VGA] Failed to create render thread\r\n");

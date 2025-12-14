@@ -106,7 +106,7 @@ int cga_init() {
 		return -1;
 	}
 
-	cga_renderThreadID = SDL_CreateThread(cga_renderThread, "xtulator-cga", NULL);
+	cga_renderThreadID = SDL_CreateThread(cga_renderThread, NULL);
 	
 	if (cga_renderThreadID == NULL) {
 		debug_log(DEBUG_ERROR, "[CGA] Failed to create render thread\r\n");

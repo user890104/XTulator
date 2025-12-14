@@ -137,5 +137,5 @@ uint64_t timing_getFreq() {
 }
 
 uint64_t timing_getCur() {
-	return SDL_GetTicks64() * (timing_freq / 1000);
+	return SDL_GetTicks() * (timing_freq / 1000);
 }

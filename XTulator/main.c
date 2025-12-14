@@ -38,6 +38,14 @@
 #include "modules/io/pcap-win32.h"
 #endif
 
+#ifdef ROCKBOX
+#ifdef COMBINED_SDL
+#define main xtulator_main
+#else
+#define main my_main
+#endif
+#endif
+
 char* usemachine = "generic_xt"; //default
 
 char title[64]; //assuming 64 isn't safe if somebody starts messing with STR_TITLE and STR_VERSION

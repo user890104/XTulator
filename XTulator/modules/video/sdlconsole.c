@@ -119,11 +119,11 @@ void sdlconsole_setTitle(char* title) { //appends something to the main title, d
 #ifdef __APPLE__
 	char *tmp_copy = strdup(tmp);
 	dispatch_async(dispatch_get_main_queue(), ^{
-		SDL_SetWindowTitle(sdlconsole_window, tmp_copy);
+		SDL_WM_SetCaption(tmp_copy, NULL);
 		free(tmp_copy);
 	});
 #else
-	SDL_SetWindowTitle(sdlconsole_window, tmp);
+	SDL_WM_SetCaption(tmp, NULL);
 #endif
 }
 

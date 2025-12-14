@@ -21,10 +21,9 @@
 #include <stdint.h>
 #include <stddef.h>
 #ifdef _WIN32
-#include <process.h>
+#include <SDL/SDL.h>
 #else
-#include <pthread.h>
-pthread_t cga_renderThreadID;
+#include <SDL_thread.h>
 #endif
 #include "cga.h"
 #include "../../config.h"
@@ -74,16 +73,7 @@ uint8_t *cga_RAM = NULL;
 
 volatile uint8_t cga_doDraw = 1;
 
-#ifdef _WIN32
-static void __cdecl cga_renderThread_win(void *dummy) {
-	cga_renderThread_impl(dummy);
-}
-#else
-static void *cga_renderThread_posix(void *dummy) {
-	cga_renderThread_impl(dummy);
-	return NULL;
-}
-#endif
+SDL_Thread *cga_renderThreadID;
 
 int cga_init() {
 	int x, y;
@@ -120,12 +110,12 @@ int cga_init() {
 		return -1;
 	}
 
-	//TODO: error checking below
-#ifdef _WIN32
-	_beginthread(cga_renderThread_win, 0, NULL);
-#else
-	pthread_create(&cga_renderThreadID, NULL, cga_renderThread_posix, NULL);
-#endif
+	cga_renderThreadID = SDL_CreateThread(cga_renderThread, "xtulator-cga", NULL);
+	
+	if (cga_renderThreadID == NULL) {
+		debug_log(DEBUG_ERROR, "[CGA] Failed to create render thread\r\n");
+		return -1;
+	}
 
 	ports_cbRegister(0x3D0, 16, (void*)cga_readport, NULL, (void*)cga_writeport, NULL, NULL);
 	memory_mapCallbackRegister(0xB8000, 0x4000, (void*)cga_readmemory, (void*)cga_writememory, NULL);
@@ -248,7 +238,7 @@ void cga_update(uint32_t start_x, uint32_t start_y, uint32_t end_x, uint32_t end
 	sdlconsole_blit((uint32_t *)cga_framebuffer, 640, 400, 640 * sizeof(uint32_t));
 }
 
-static void cga_renderThread_impl(void* dummy) {
+static int cga_renderThread(void* dummy) {
 	while (running) {
 		if (cga_doDraw == 1) {
 			cga_update(0, 0, 639, 399);
@@ -258,11 +248,8 @@ static void cga_renderThread_impl(void* dummy) {
 			utility_sleep(1);
 		}
 	}
-#ifdef _WIN32
-	_endthread();
-#else
-	pthread_exit(NULL);
-#endif
+	
+	return 0;
 }
 
 void cga_writeport(void* dummy, uint16_t port, uint8_t value) {

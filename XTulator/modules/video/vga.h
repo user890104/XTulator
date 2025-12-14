@@ -23,7 +23,7 @@ void vga_blinkCallback(void* dummy);
 void vga_hblankCallback(void* dummy);
 void vga_hblankEndCallback(void* dummy);
 void vga_drawCallback(void* dummy);
-static void vga_renderThread_impl(void* dummy);
+static int vga_renderThread(void* dummy);
 void vga_writememory(void* dummy, uint32_t addr, uint8_t value);
 uint8_t vga_readmemory(void* dummy, uint32_t addr);
 void vga_dumpregs();

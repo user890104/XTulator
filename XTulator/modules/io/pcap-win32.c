@@ -29,10 +29,9 @@
 #include <string.h>
 #include <stdint.h>
 #ifdef _WIN32
-#include <process.h>
+#include <SDL/SDL.h>
 #else
-#include <pthread.h>
-pthread_t pcap_dispatchThreadID;
+#include <SDL_thread.h>
 #endif
 #include <pcap.h>
 #include "../../debuglog.h"
@@ -43,6 +42,7 @@ pthread_t pcap_dispatchThreadID;
 pcap_t* pcap_adhandle;
 
 NE2000_t* pcap_ne2000 = NULL;
+SDL_Thread *pcap_dispatchThreadID;
 
 void pcap_listdevs() {
 	pcap_if_t* alldevs;
@@ -113,19 +113,18 @@ int pcap_init(NE2000_t* ne2000, int dev) {
 	pcap_freealldevs(alldevs);
 
 	pcap_ne2000 = ne2000;
-
-
-
-#ifdef _WIN32
-	_beginthread((void*)pcap_dispatchThread, 0, NULL);
-#else
-	pthread_create(&pcap_dispatchThreadID, NULL, pcap_dispatchThread, NULL);
-#endif
+	
+	pcap_dispatchThreadID = SDL_CreateThread(pcap_dispatchThread, "xtulator-pcap-win32", NULL);
+	
+	if (pcap_dispatchThreadID == NULL) {
+		debug_log(DEBUG_ERROR, "[PCAP-WIN32] Failed to create thread");
+		return -1;	
+	}
 
 	return 0;
 }
 
-void pcap_dispatchThread() {
+static int pcap_dispatchThread() {
 	pcap_loop(pcap_adhandle, 0, pcap_rx_handler, NULL);
 	/*while (running) {
 		pcap_dispatch(pcap_adhandle, 1, pcap_rx_handler, NULL);
@@ -133,6 +132,8 @@ void pcap_dispatchThread() {
 			utility_sleep(1);
 		}
 	}*/
+	
+	return 0;
 }
 
 void pcap_rx_handler(u_char* param, const struct pcap_pkthdr* header, const u_char* pkt_data) {

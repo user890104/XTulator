@@ -21,10 +21,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #ifdef _WIN32
+#include <SDL/SDL.h>
 #include <Windows.h>
 #else
-#include <time.h>
-#include <errno.h>
+#include <SDL2/SDL.h>
 #endif
 #include "config.h"
 #include "memory.h"
@@ -49,15 +49,5 @@ int utility_loadFile(uint8_t* dst, size_t len, char* srcfile) {
 }
 
 void utility_sleep(uint32_t ms) {
-#ifdef _WIN32
-	Sleep((DWORD)ms);
-#else
-	int res;
-	struct timespec ts;
-	ts.tv_sec = 0;
-	ts.tv_nsec = (long)ms * 1000;
-	do {
-		res = nanosleep(&ts, &ts);
-	} while (res && errno == EINTR);
-#endif
+	SDL_Delay(ms);
 }

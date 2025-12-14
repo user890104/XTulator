@@ -32,7 +32,7 @@
 #include "../../timing.h"
 #include "../../menus.h"
 #include "../../debuglog.h"
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(ROCKBOX)
 #include <dispatch/dispatch.h>
 #include <pthread.h>
 #endif
@@ -84,7 +84,7 @@ int sdlconsole_setWindow(int w, int h) {
 	if (sdlconsole_screen) SDL_FreeSurface(sdlconsole_screen);
 	sdlconsole_screen = NULL;
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(ROCKBOX)
 	if (pthread_main_np()) {
 		sdlconsole_screen = SDL_SetVideoMode(w, h, 32, SDL_SWSURFACE);
 	}
@@ -111,7 +111,7 @@ void sdlconsole_setTitle(char* title) { //appends something to the main title, d
 	char tmp[1024];
 	sprintf(tmp, "%s - %s", sdlconsole_title, title);
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(ROCKBOX)
 	char *tmp_copy = strdup(tmp);
 	dispatch_async(dispatch_get_main_queue(), ^{
 		SDL_WM_SetCaption(tmp_copy, NULL);

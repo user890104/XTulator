@@ -38,10 +38,7 @@
 #include <SDL/SDL.h>
 #include <process.h>
 #else
-#include <sys/time.h>
 #include <SDL2/SDL.h>
-#include <pthread.h>
-pthread_t sdlaudio_sampleThreadID;
 #endif
 
 SDL_mutex* sdlaudio_mutex = NULL;

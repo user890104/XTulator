@@ -47,7 +47,7 @@
 #define MACHINE_HW_SKIP_RTC				0x0400000000000000ULL
 
 typedef struct {
-	CPU_t CPU;
+	CPU_t CPU_impl;
 	I8259_t i8259;
 	I8253_t i8253;
 	I8237_t i8237;

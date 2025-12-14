@@ -133,8 +133,8 @@ int main(int argc, char *argv[]) {
 			goCPU = 1;
 		}
 		if (goCPU) {
-			cpu_interruptCheck(&machine.CPU, &machine.i8259);
-			cpu_exec(&machine.CPU, instructionsperloop);
+			cpu_interruptCheck(&machine.CPU_impl, &machine.i8259);
+			cpu_exec(&machine.CPU_impl, instructionsperloop);
 			ops += instructionsperloop;
 			goCPU = 0;
 		}

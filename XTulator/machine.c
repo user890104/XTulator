@@ -145,7 +145,7 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 
 	i8259_init(&machine->i8259);
 	i8253_init(&machine->i8253, &machine->i8259, &machine->pcspeaker);
-	i8237_init(&machine->i8237, &machine->CPU);
+	i8237_init(&machine->i8237, &machine->CPU_impl);
 	i8255_init(&machine->i8255, &machine->KeyState, &machine->pcspeaker);
 	pcspeaker_init(&machine->pcspeaker);
 
@@ -208,12 +208,12 @@ int machine_init_generic_xt(MACHINE_t* machine) {
 	}
 #endif
 
-	cpu_reset(&machine->CPU);
+	cpu_reset(&machine->CPU_impl);
 #ifndef USE_DISK_HLE
-	fdc_init(&fdc, &machine->CPU, &i8259, &i8237);
+	fdc_init(&fdc, &machine->CPU_impl, &i8259, &i8237);
 	fdc_insert(&fdc, 0, "dos622.img");
 #else
-	biosdisk_init(&machine->CPU);
+	biosdisk_init(&machine->CPU_impl);
 #endif
 
 	switch (videocard) {

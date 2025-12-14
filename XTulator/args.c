@@ -177,28 +177,28 @@ int args_parse(MACHINE_t* machine, int argc, char* argv[]) {
 				printf("Parameter required for -fd0. Use -h for help.\r\n");
 				return -1;
 			}
-			biosdisk_insert(&machine->CPU, 0, argv[++i]);
+			biosdisk_insert(&machine->CPU_impl, 0, argv[++i]);
 		}
 		else if (args_isMatch(argv[i], "-fd1")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -fd1. Use -h for help.\r\n");
 				return -1;
 			}
-			biosdisk_insert(&machine->CPU, 1, argv[++i]);
+			biosdisk_insert(&machine->CPU_impl, 1, argv[++i]);
 		}
 		else if (args_isMatch(argv[i], "-hd0")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -hd0. Use -h for help.\r\n");
 				return -1;
 			}
-			biosdisk_insert(&machine->CPU, 2, argv[++i]);
+			biosdisk_insert(&machine->CPU_impl, 2, argv[++i]);
 		}
 		else if (args_isMatch(argv[i], "-hd1")) {
 			if ((i + 1) == argc) {
 				printf("Parameter required for -hd1. Use -h for help.\r\n");
 				return -1;
 			}
-			biosdisk_insert(&machine->CPU, 3, argv[++i]);
+			biosdisk_insert(&machine->CPU_impl, 3, argv[++i]);
 		}
 		else if (args_isMatch(argv[i], "-boot")) {
 			if ((i + 1) == argc) {

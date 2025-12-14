@@ -171,7 +171,7 @@ void menus_openFloppyFile(uint8_t disk) {
 			return;
 		}
 		wcstombs(filembs, of_dlg.lpstrFile, size + 1);
-		biosdisk_insert(&menus_useMachine->CPU, disk, filembs);
+		biosdisk_insert(&menus_useMachine->CPU_impl, disk, filembs);
 		free(filembs);
 	}
 }
@@ -197,7 +197,7 @@ void menus_openHardFile(uint8_t disk) {
 			return;
 		}
 		wcstombs(filembs, of_dlg.lpstrFile, size + 1);
-		biosdisk_insert(&menus_useMachine->CPU, disk, filembs);
+		biosdisk_insert(&menus_useMachine->CPU_impl, disk, filembs);
 		free(filembs);
 		menus_reset();
 	}
@@ -212,11 +212,11 @@ void menus_changeFloppy1() {
 }
 
 void menus_ejectFloppy0() {
-	biosdisk_eject(&menus_useMachine->CPU, 0);
+	biosdisk_eject(&menus_useMachine->CPU_impl, 0);
 }
 
 void menus_ejectFloppy1() {
-	biosdisk_eject(&menus_useMachine->CPU, 1);
+	biosdisk_eject(&menus_useMachine->CPU_impl, 1);
 }
 
 void menus_insertHard0() {

@@ -82,11 +82,14 @@ uint8_t rtc_read(void* dummy, uint16_t addr) {
 
 uint8_t rtc_read(void* dummy, uint16_t addr) {
 	uint8_t ret = 0xFF;
-	time_t now;
 	struct tm tdata;
-
+	
+#ifndef ROCKBOX
+	time_t now;
 	time(&now);
+
 	tdata = *localtime(&now);
+#endif
 
 	addr &= 0x1F;
 	switch (addr) {

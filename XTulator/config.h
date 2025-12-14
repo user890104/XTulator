@@ -6,7 +6,12 @@
 #define STR_TITLE "XTulator"
 #define STR_VERSION "0.24.5.24"
 
+#ifdef ROCKBOX
+#include "rbpaths.h"
+#define XTULATOR_DIR ROCKBOX_DIR "/xtulator/"
+#else
 #define XTULATOR_DIR ""
+#endif
 
 //#define DEBUG_DMA
 //#define DEBUG_VGA

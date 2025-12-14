@@ -168,10 +168,12 @@ void sdlconsole_blit(uint32_t *pixels, int w, int h, int stride) {
 void sdlconsole_mousegrab() {
 	sdlconsole_ctrl = sdlconsole_alt = 0;
 	if (sdlconsole_grabbed) {
-		SDL_SetRelativeMouseMode(SDL_FALSE);
+		SDL_WM_GrabInput(SDL_GRAB_OFF);
+		SDL_ShowCursor(1);
 		sdlconsole_grabbed = 0;
 	} else {
-		SDL_SetRelativeMouseMode(SDL_TRUE);
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+		SDL_ShowCursor(0);
 		sdlconsole_grabbed = 1;
 	}
 }

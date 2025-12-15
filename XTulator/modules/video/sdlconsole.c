@@ -59,6 +59,10 @@ int sdlconsole_init(char *title) {
 
 	if (SDL_Init(SDL_INIT_VIDEO)) return -1;
 
+#ifdef ROCKBOX
+	SDL_ShowCursor(SDL_DISABLE);
+#endif
+
 	sdlconsole_title = title;
 	sdlconsole_curw = 640;
 	sdlconsole_curh = 400;
